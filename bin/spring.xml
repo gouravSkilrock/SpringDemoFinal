@@ -1,36 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd" [
-<!ENTITY contextInclude SYSTEM "org/springframework/web/portlet/context/WEB-INF/contextInclude.xml">
-]>
-
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+ 
+    <context:component-scan base-package="com.websystique.springmvc" />
+ 
 
 	<bean id="triangle"  class="com.skilrock.springsDemo.Triangle" >
-	<property name="width" value="10"></property>
-	<constructor-arg type="String" value="Rectangle" ></constructor-arg>
-	<constructor-arg type="int" value="20" ></constructor-arg>
+		<property name="width" value="10"></property>
+		<constructor-arg type="String" value="Rectangle" ></constructor-arg>
+		<constructor-arg type="int" value="20" ></constructor-arg>
 	</bean>
 	
 	
 	<bean id="objectInjection"  class="com.skilrock.springsDemo.ObjectInjectionMethodClass" >
-	<property name="pointA" ref="PointA"></property>
-	<property name="pointB">
-		 <bean class="com.skilrock.springsDemo.ObjectInjectionPoint">
-		<property name="x" value="20"></property>
-		<property name="y" value="0"></property>
-		</bean>
-	</property>
-	<property name="pointC">
-		<bean id="PointC" class="com.skilrock.springsDemo.ObjectInjectionPoint">
-		<property name="x" value="0"></property>
-		<property name="y" value="-20"></property>
-		</bean>
-	</property>
+		<property name="pointA" ref="pointA"></property>
+		<property name="pointB">
+			 <bean class="com.skilrock.springsDemo.ObjectInjectionPoint">
+			<property name="x" value="20"></property>
+			<property name="y" value="0"></property>
+			</bean>
+		</property>
+		<property name="pointC">
+			<bean class="com.skilrock.springsDemo.ObjectInjectionPoint">
+				<property name="x" value="0"></property>
+				<property name="y" value="-20"></property>
+			</bean>
+		</property>
 	</bean>
 
 
-	<bean id="PointA" class="com.skilrock.springsDemo.ObjectInjectionPoint">
-			<property name="x" value="0"></property>
+	<bean id="pointA" class="com.skilrock.springsDemo.ObjectInjectionPoint">
+	       <qualifier value="circleRelated"></qualifier>
+			<property name="x" value="${PointA.pointX}"></property>
+			<property name="y" value="${PointA.pointY}"></property>
+	</bean>
+	<bean id="pointB" class="com.skilrock.springsDemo.ObjectInjectionPoint">
+			<property name="x" value="${PointB.pointX}"></property>
+			<property name="y" value="${PointB.pointY}"></property>
+	</bean>
+	<bean id="pointC" class="com.skilrock.springsDemo.ObjectInjectionPoint">
+			<property name="x" value="4"></property>
 			<property name="y" value="0"></property>
-			</bean>
-	</beans>
+	</bean>
+	
+	
+	<bean id="geometry" class="com.skilrock.springsDemo.Geometry">
+			<property name="coordinateList">
+				<list>
+					<ref bean="coordinateA" />
+					<ref bean="coordinateB" />
+				</list>
+			</property>
+	</bean>
+	
+	<bean id="coordinateA" class="com.skilrock.springsDemo.Coordinate">
+			<property name="x" value="1"></property>
+			<property name="y" value="0"></property>
+			<property name="z" value="-1"></property>
+	</bean>
+	
+	<bean id="coordinateB" class="com.skilrock.springsDemo.Coordinate">
+			<property name="x" value="-1"></property>
+			<property name="y" value="1"></property>
+			<property name="z" value="1"></property>
+	</bean>
+	
+	<!-- AutoWire Exmaple Start  -->
+	<bean id="autoWireObjet" class="com.skilrock.springsDemo.AutoWiring" autowire="byName">
+	</bean>
+	
+	<bean id="autoWiredObjectSecond" class="com.skilrock.springsDemo.AutoWiring" autowire="byName">
+	</bean>
+	<!-- AutoWire Exmaple End  -->
+	
+	
+	<!-- Inheritance of beans example Start -->
+	<bean id="parentInheritanceBeanXmlFile" class="com.skilrock.springsDemo.InheritanceOfBeanInXml" abstract="true">
+	<property name="pointX" ref="pointX"></property>
+	</bean>
+	
+	<bean id="beanInXmlObject" class="com.skilrock.springsDemo.InheritanceOfBeanInXml" parent="parentInheritanceBeanXmlFile" init-method="myInit" destroy-method="myDestroy">
+	<property name="pointY" ref="pointY"></property>
+	<property name="pointZ" ref="pointZ"></property>
+	</bean>
+	
+	<bean id="beanInXmlObjectSecond" class="com.skilrock.springsDemo.InheritanceOfBeanInXml" parent="beanInXmlObject">
+	<property name="pointX" ref="pointX"></property>
+	</bean>
+	
+	<bean id="pointX" class="com.skilrock.springsDemo.ObjectInjectionPoint">
+			<property name="x" value="0"></property>
+			<property name="y" value="1"></property>
+	</bean>
+	
+	<bean id="pointY" class="com.skilrock.springsDemo.ObjectInjectionPoint">
+			<property name="x" value="1"></property>
+			<property name="y" value="1"></property>
+	</bean>
+	
+	<bean id="pointZ" class="com.skilrock.springsDemo.ObjectInjectionPoint">
+			<property name="x" value="1"></property>
+			<property name="y" value="0"></property>
+	</bean>
+	<!-- Inheritance of beans example End -->
+	<!-- Inheritance of beans using collection list example Start -->
+	<bean id="parentFileOfInheritanceBeanXmLUsingList" class="com.skilrock.springsDemo.InheritanceOfBeanInXmlUsingList" abstract="true">
+		<property name="points">
+			 <list>
+			 	<ref bean="pointX"  />
+			 </list>
+		</property>
+	</bean>
+	<bean id="beanInXmlObjectThird" class="com.skilrock.springsDemo.InheritanceOfBeanInXmlUsingList" parent="parentFileOfInheritanceBeanXmLUsingList">
+		<property name="points">
+			<list merge="true">
+				<ref bean="pointY" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Inheritance of beans using collection list example end -->
+	
+	<!-- post bean processor exmaple start -->
+	<bean class="com.skilrock.springsDemo.DisplayBeanPostProcessor">
+	</bean>
+	<!-- post bean processor exmaple end -->
+	
+	<!-- post bean factory processor exmaple start -->
+	<bean class="com.skilrock.springsDemo.DisplayBeanFactoryProcessor">
+	</bean>
+	<!-- post bean factory processor exmaple end -->
+	
+	<!-- Default Bean factory post processor of spring is used start -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<property name="locations" value="pointsConfig.properties"></property>
+	</bean>
+	<!-- Default Bean factory post processor of spring is used end -->
+	
+	
+	<!-- Default Bean factory post processor of spring is used start -->
+	<bean id="circleObject" class="com.skilrock.springsDemo.Circle">
+	
+	</bean>
+	<!-- Default Bean factory post processor of spring is used end -->
+	
+	<context:annotation-config/>
+	
+	
+	
+</beans>
+	

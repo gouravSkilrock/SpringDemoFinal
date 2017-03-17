@@ -1,6 +1,6 @@
 package com.skilrock.springsDemo;
 
-public class Triangle {
+public class Triangle implements IShape {
 	
 	private String type;
 	private int length;
@@ -38,7 +38,7 @@ public class Triangle {
 	}
 
 
-	public void Draw(){
+	public void draw(){
 		System.out.println(getType()+" Triangle Drawn with length : "+getLength()+" And width :"+getWidth());
 	}
 
