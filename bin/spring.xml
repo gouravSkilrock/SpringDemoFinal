@@ -127,14 +127,14 @@
 	<!-- Inheritance of beans using collection list example end -->
 	
 	<!-- post bean processor exmaple start -->
-	<bean class="com.skilrock.springsDemo.DisplayBeanPostProcessor">
-	</bean>
+<!-- 	<bean class="com.skilrock.springsDemo.DisplayBeanPostProcessor">
+	</bean> -->
 	<!-- post bean processor exmaple end -->
 	
 	<!-- post bean factory processor exmaple start -->
-	<bean class="com.skilrock.springsDemo.DisplayBeanFactoryProcessor">
+<!-- 	<bean class="com.skilrock.springsDemo.DisplayBeanFactoryProcessor">
 	</bean>
-	<!-- post bean factory processor exmaple end -->
+ -->	<!-- post bean factory processor exmaple end -->
 	
 	<!-- Default Bean factory post processor of spring is used start -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -144,14 +144,23 @@
 	
 	
 	<!-- Default Bean factory post processor of spring is used start -->
-	<bean id="circleObject" class="com.skilrock.springsDemo.Circle">
+	<!-- <bean id="circleObject" class="com.skilrock.springsDemo.Circle">
 	
-	</bean>
+	</bean> -->
 	<!-- Default Bean factory post processor of spring is used end -->
 	
 	<context:annotation-config/>
+	<context:component-scan base-package="com.skilrock.springsDemo" />
 	
-	
+	<!-- get Message from properyty file using resource bundle  start -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" >
+	<property name="basenames">
+	<list>
+	<value>myMessages</value>
+	</list>
+	</property>
+	</bean>
+	<!-- get Message from properyty file using resource bundle end -->
 	
 </beans>
 	
